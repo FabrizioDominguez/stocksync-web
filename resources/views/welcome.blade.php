@@ -29,6 +29,34 @@
 </head>
 
 <body class="font-sans antialiased overflow-x-hidden relative">
+    
+    <nav class="absolute top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center max-w-7xl mx-auto right-0">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-indigo-600 shadow-[0_0_10px_rgba(59,130,246,0.8)]"></div>
+            <span class="font-extrabold text-white tracking-wider text-xl">STOCKSYNC</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+            @auth
+                <a href="{{ url('/dashboard') }}" class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                    <button class="relative bg-[#0b1120] text-white font-bold py-2 px-6 rounded-lg transition-all hover:scale-[1.02]">
+                        Ir al Dashboard
+                    </button>
+                </a>
+            @else
+                <a href="{{ route('login') }}" class="text-slate-300 hover:text-white font-semibold transition-colors duration-300">
+                    Login
+                </a>
+                <a href="{{ route('register') }}" class="relative group ml-2">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                    <button class="relative bg-[#0b1120] text-white font-bold py-2 px-6 rounded-lg transition-all hover:scale-[1.02]">
+                        Registrarse
+                    </button>
+                </a>
+            @endauth
+        </div>
+    </nav>
 
     <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-[100px] opacity-70 animate-blob"></div>
