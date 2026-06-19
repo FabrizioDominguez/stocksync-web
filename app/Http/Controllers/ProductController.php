@@ -40,7 +40,7 @@ class ProductController extends Controller
         Product::create($request->all());
 
         // Redireccionar con un mensaje de éxito que leerá la vista index
-        return redirect()->route('dashboard')->with('success', '¡Producto agregado correctamente al inventario!');
+        return redirect()->route('products.index')->with('success', '¡Producto agregado correctamente al inventario!');
     }
 
     // 4. MOSTRAR FORMULARIO DE EDITAR
@@ -68,7 +68,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        return redirect()->route('dashboard')->with('success', '¡Producto actualizado correctamente!');
+        return redirect()->route('products.index')->with('success', '¡Producto actualizado correctamente!');
     }
 
     // 6. ELIMINAR EL PRODUCTO
@@ -77,6 +77,6 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
 
-        return redirect()->route('dashboard')->with('success', 'El producto ha sido eliminado del inventario.');
+        return redirect()->route('products.index')->with('success', 'El producto ha sido eliminado del inventario.');
     }
 }
