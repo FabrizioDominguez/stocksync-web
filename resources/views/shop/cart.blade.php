@@ -80,6 +80,11 @@
 
 @section('content')
 <div class="cart-container">
+    <a href="{{ route('shop.index') }}" style="display: inline-flex; align-items: center; gap: 8px; color: #94a3b8; text-decoration: none; font-weight: 600; margin-bottom: 2rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        Seguir Comprando (Volver al Catálogo)
+    </a>
+
     <div class="cart-header">
         <h1>Tu Carrito de Encargos</h1>
         <p>Revisa tus productos antes de enviar el encargo por WhatsApp.</p>
@@ -151,8 +156,13 @@
             total += itemTotal;
             count += item.quantity;
 
+            let imageHtml = item.image 
+                ? `<div style="width: 50px; height: 50px; border-radius: 8px; overflow: hidden; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;"><img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover;"></div>`
+                : `<div style="width: 50px; height: 50px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #475569; flex-shrink: 0;"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>`;
+
             listDiv.innerHTML += `
                 <div class="cart-item">
+                    ${imageHtml}
                     <div class="item-info">
                         <h4 class="item-name">${item.name}</h4>
                         <div class="item-price">Bs. ${item.price.toFixed(2)}</div>

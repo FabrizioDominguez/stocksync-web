@@ -59,9 +59,13 @@
     </a>
 
     <div class="detail-grid">
-        <div class="image-box">
-            <span class="badge-category">{{ $product->category->name }}</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <div class="image-box" style="{{ $product->image_path ? 'padding: 0; background: none;' : '' }}">
+            <span class="badge-category" style="z-index: 10;">{{ $product->category->name }}</span>
+            @if($product->image_path)
+                <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+            @else
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            @endif
         </div>
 
         <div class="info-box">
@@ -96,7 +100,7 @@
                 </div>
             </div>
 
-            <button class="btn-cart-large" {{ $product->stock == 0 ? 'disabled' : '' }} onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }})">
+            <button class="btn-cart-large" {{ $product->stock == 0 ? 'disabled' : '' }} onclick="addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $product->image_path ? Storage::url($product->image_path) : '' }}')">
                 <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 {{ $product->stock == 0 ? 'Producto Agotado' : 'Añadir al Carrito' }}
             </button>

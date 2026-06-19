@@ -175,18 +175,20 @@
         }
 
         // Función para añadir al carrito
-        function addToCart(id, name, price) {
+        function addToCart(id, name, price, image = '') {
             let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
             let existingItem = cart.find(item => item.id === id);
             
             if(existingItem) {
                 existingItem.quantity += 1;
+                if(image) existingItem.image = image; // Actualizar imagen por si no la tenía
             } else {
                 cart.push({
                     id: id,
                     name: name,
                     price: parseFloat(price),
-                    quantity: 1
+                    quantity: 1,
+                    image: image
                 });
             }
             

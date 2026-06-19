@@ -123,8 +123,12 @@
         <div class="product-grid">
             @foreach($products as $product)
                 <a href="{{ route('shop.show', $product->id) }}" class="product-card">
-                    <div class="product-image-placeholder">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <div class="product-image-placeholder" style="{{ $product->image_path ? 'padding:0; background:none;' : '' }}">
+                        @if($product->image_path)
+                            <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        @endif
                     </div>
                     
                     <div class="product-content">
@@ -144,7 +148,7 @@
                                 <div class="stock-badge in-stock"><div class="dot"></div> Disponible ({{ $product->stock }})</div>
                             @endif
 
-                            <button class="btn-add" onclick="event.preventDefault(); addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }});" title="Añadir al carrito">
+                            <button class="btn-add" onclick="event.preventDefault(); addToCart({{ $product->id }}, '{{ addslashes($product->name) }}', {{ $product->price }}, '{{ $product->image_path ? Storage::url($product->image_path) : '' }}');" title="Añadir al carrito">
                                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
                             </button>
                         </div>

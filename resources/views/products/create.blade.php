@@ -202,7 +202,7 @@
 
     {{-- Form Card --}}
     <div class="form-card">
-        <form action="{{ route('products.store') }}" method="POST">
+        <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             {{-- Identificación --}}
@@ -233,6 +233,16 @@
             <div class="form-group">
                 <label>Ficha Técnica / Especificaciones</label>
                 <textarea name="technical_specs" placeholder="Describe los detalles técnicos: puertos, velocidades, capacidades, compatibilidades...">{{ old('technical_specs') }}</textarea>
+            </div>
+
+            <div class="form-divider"></div>
+
+            {{-- Imagen del Producto --}}
+            <div class="form-section-title">Imagen del Producto</div>
+            <div class="form-group">
+                <label>Subir Imagen (Opcional)</label>
+                <input type="file" name="image" accept="image/*" style="padding: 10px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); cursor: pointer; color: #e2e8f0; border-radius: 10px; width: 100%;">
+                <p style="font-size: 0.75rem; color: #64748b; margin-top: 6px; margin-bottom: 0;">Formatos permitidos: JPG, PNG, WEBP. Tamaño máximo: 2MB.</p>
             </div>
 
             <div class="form-divider"></div>

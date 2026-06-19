@@ -468,12 +468,25 @@
                                 <span class="cell-barcode">{{ $item->barcode }}</span>
                             </td>
                             <td>
-                                <span class="cell-name">{{ $item->name }}</span>
-                                @if($item->technical_specs)
-                                    <div style="font-size:0.75rem; color:#475569; margin-top:3px; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                                        {{ $item->technical_specs }}
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    @if($item->image_path)
+                                        <div style="width: 40px; height: 40px; border-radius: 8px; overflow: hidden; background: #1e293b; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;">
+                                            <img src="{{ Storage::url($item->image_path) }}" alt="{{ $item->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    @else
+                                        <div style="width: 40px; height: 40px; border-radius: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #475569; flex-shrink: 0;">
+                                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                        </div>
+                                    @endif
+                                    <div>
+                                        <span class="cell-name">{{ $item->name }}</span>
+                                        @if($item->technical_specs)
+                                            <div style="font-size:0.75rem; color:#475569; margin-top:3px; max-width:260px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                                {{ $item->technical_specs }}
+                                            </div>
+                                        @endif
                                     </div>
-                                @endif
+                                </div>
                             </td>
                             <td>
                                 <span class="cell-category">{{ $item->category->name }}</span>

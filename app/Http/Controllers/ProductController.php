@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -31,13 +32,21 @@ class ProductController extends Controller
             'barcode' => 'required|unique:products,barcode',
             'name' => 'required|string|max:150',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'min_stock' => 'required|integer|min:0',
         ]);
 
+        $data = $request->all();
+
+        // Subir la imagen si existe
+        if ($request->hasFile('image')) {
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
         // Guardar en la base de datos
-        Product::create($request->all());
+        Product::create($data);
 
         // Redireccionar con un mensaje de éxito que leerá la vista index
         return redirect()->route('products.index')->with('success', '¡Producto agregado correctamente al inventario!');
@@ -60,13 +69,26 @@ class ProductController extends Controller
             'barcode' => 'required|unique:products,barcode,' . $product->id,
             'name' => 'required|string|max:150',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|integer|min:0',
             'min_stock' => 'required|integer|min:0',
             'status' => 'required|in:active,inactive',
         ]);
 
-        $product->update($request->all());
+        $data = $request->all();
+
+        // Si sube una imagen nueva
+        if ($request->hasFile('image')) {
+            // Borrar la imagen anterior si existe
+            if ($product->image_path && Storage::disk('public')->exists($product->image_path)) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+            // Guardar la nueva
+            $data['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($data);
 
         return redirect()->route('products.index')->with('success', '¡Producto actualizado correctamente!');
     }
@@ -75,6 +97,12 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        
+        // Borrar la imagen física del servidor
+        if ($product->image_path && Storage::disk('public')->exists($product->image_path)) {
+            Storage::disk('public')->delete($product->image_path);
+        }
+
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'El producto ha sido eliminado del inventario.');

@@ -142,7 +142,7 @@
 
     {{-- Form Card --}}
     <div class="form-card">
-        <form action="{{ route('products.update', $product->id) }}" method="POST">
+        <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -182,6 +182,23 @@
             <div class="form-group">
                 <label>Ficha Técnica / Especificaciones</label>
                 <textarea name="technical_specs">{{ old('technical_specs', $product->technical_specs) }}</textarea>
+            </div>
+
+            <div class="form-divider"></div>
+
+            {{-- Imagen del Producto --}}
+            <div class="form-section-title">Imagen del Producto</div>
+            <div class="form-group" style="display: flex; gap: 1rem; align-items: flex-start; flex-wrap: wrap;">
+                @if($product->image_path)
+                    <div style="flex-shrink: 0; width: 100px; height: 100px; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                        <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                @endif
+                <div style="flex-grow: 1; min-width: 250px;">
+                    <label>{{ $product->image_path ? 'Actualizar Imagen' : 'Subir Imagen' }} (Opcional)</label>
+                    <input type="file" name="image" accept="image/*" style="padding: 10px; background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.2); cursor: pointer; color: #e2e8f0; border-radius: 10px; width: 100%;">
+                    <p style="font-size: 0.75rem; color: #64748b; margin-top: 6px; margin-bottom: 0;">Formatos permitidos: JPG, PNG, WEBP. Tamaño máximo: 2MB.</p>
+                </div>
             </div>
 
             <div class="form-divider"></div>
