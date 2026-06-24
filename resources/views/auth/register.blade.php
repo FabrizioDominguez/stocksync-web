@@ -16,6 +16,20 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Store Name -->
+        <div class="mt-4">
+            <x-input-label for="store_name" value="Nombre de tu Tienda/Empresa" />
+            <x-text-input id="store_name" class="block mt-1 w-full" type="text" name="store_name" :value="old('store_name')" required />
+            <x-input-error :messages="$errors->get('store_name')" class="mt-2" />
+        </div>
+
+        <!-- WhatsApp Number -->
+        <div class="mt-4">
+            <x-input-label for="whatsapp_number" value="Número de WhatsApp (Ventas)" />
+            <x-text-input id="whatsapp_number" class="block mt-1 w-full" type="text" name="whatsapp_number" :value="old('whatsapp_number')" />
+            <x-input-error :messages="$errors->get('whatsapp_number')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
@@ -44,9 +58,9 @@
                 {{ __('Already registered?') }}
             </a>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+            <button class="ms-4 primary-btn">
+                {{ __('Registrar Mi Tienda') }}
+            </button>
         </div>
     </form>
 </x-guest-layout>

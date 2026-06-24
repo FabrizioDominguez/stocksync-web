@@ -80,7 +80,7 @@
 
 @section('content')
 <div class="cart-container">
-    <a href="{{ route('shop.index') }}" style="display: inline-flex; align-items: center; gap: 8px; color: #94a3b8; text-decoration: none; font-weight: 600; margin-bottom: 2rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
+    <a href="{{ route('shop.index', $tenant->slug) }}" style="display: inline-flex; align-items: center; gap: 8px; color: #94a3b8; text-decoration: none; font-weight: 600; margin-bottom: 2rem; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         Seguir Comprando (Volver al Catálogo)
     </a>
@@ -121,7 +121,7 @@
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
         <h2>Tu carrito está vacío</h2>
         <p>Parece que aún no has agregado ningún producto a tu encargo.</p>
-        <a href="{{ route('shop.index') }}" class="btn-outline">Volver a la Tienda</a>
+        <a href="{{ route('shop.index', $tenant->slug) }}" class="btn-outline">Volver a la Tienda</a>
     </div>
 
 </div>
@@ -130,10 +130,10 @@
 @push('scripts')
 <script>
     // Referencia al teléfono de la tienda (Para proyecto universitario usamos un número de prueba)
-    const WHATSAPP_NUMBER = "59170000000"; 
+    const WHATSAPP_NUMBER = "{{ $tenant->whatsapp_number ?? '59170000000' }}"; 
 
     function renderCart() {
-        let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         const contentDiv = document.getElementById('cartContent');
         const emptyDiv = document.getElementById('emptyCartMessage');
         const listDiv = document.getElementById('cartItemsList');
@@ -186,28 +186,28 @@
     }
 
     function updateQty(index, change) {
-        let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         if(cart[index]) {
             cart[index].quantity += change;
             if(cart[index].quantity <= 0) {
                 cart.splice(index, 1);
             }
-            localStorage.setItem('stocksync_cart', JSON.stringify(cart));
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
             updateCartCount(); // Del layout
             renderCart(); // De esta vista
         }
     }
 
     function removeItem(index) {
-        let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         cart.splice(index, 1);
-        localStorage.setItem('stocksync_cart', JSON.stringify(cart));
+        localStorage.setItem(CART_KEY, JSON.stringify(cart));
         updateCartCount();
         renderCart();
     }
 
     function sendToWhatsApp() {
-        let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+        let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
         if(cart.length === 0) return;
 
         let total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);

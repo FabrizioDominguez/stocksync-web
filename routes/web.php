@@ -14,9 +14,9 @@ Route::get('/', function () {
 });
 
 // Catálogo Público
-Route::get('/tienda', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/carrito', [ShopController::class, 'cart'])->name('shop.cart');
-Route::get('/tienda/{id}', [ShopController::class, 'show'])->name('shop.show');
+Route::get('/t/{store_slug}', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/t/{store_slug}/carrito', [ShopController::class, 'cart'])->name('shop.cart');
+Route::get('/t/{store_slug}/producto/{id}', [ShopController::class, 'show'])->name('shop.show');
 
 // === BLOQUE PROTEGIDO (Solo usuarios logueados) ===
 Route::middleware(['auth', 'verified'])->group(function () {

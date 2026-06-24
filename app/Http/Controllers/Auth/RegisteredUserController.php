@@ -34,12 +34,22 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'store_name' => ['required', 'string', 'max:255'],
+            'whatsapp_number' => ['nullable', 'string', 'max:20'],
+        ]);
+
+        $tenant = \App\Models\Tenant::create([
+            'name' => $request->store_name,
+            'slug' => \Illuminate\Support\Str::slug($request->store_name) . '-' . substr(uniqid(), -4),
+            'whatsapp_number' => $request->whatsapp_number,
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'tenant_id' => $tenant->id,
+            'role_id' => \App\Models\Role::where('name', 'admin')->first()->id ?? 1,
         ]);
 
         event(new Registered($user));

@@ -53,7 +53,7 @@
 
 @section('content')
 <div class="product-detail-container">
-    <a href="{{ route('shop.index') }}" class="back-link">
+    <a href="{{ route('shop.index', $tenant->slug) }}" class="back-link">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
         Volver al Catálogo
     </a>

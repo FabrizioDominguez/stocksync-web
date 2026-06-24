@@ -106,7 +106,7 @@
             <p>Descubre nuestro inventario sincronizado en tiempo real.</p>
         </div>
         
-        <form action="{{ route('shop.index') }}" method="GET" class="filter-group">
+        <form action="{{ route('shop.index', $tenant->slug) }}" method="GET" class="filter-group">
             <span class="filter-label">Categoría:</span>
             <select name="category" class="filter-select" onchange="this.form.submit()">
                 <option value="">Todas las categorías</option>
@@ -122,7 +122,7 @@
     @if($products->count() > 0)
         <div class="product-grid">
             @foreach($products as $product)
-                <a href="{{ route('shop.show', $product->id) }}" class="product-card">
+                <a href="{{ route('shop.show', ['store_slug' => $tenant->slug, 'id' => $product->id]) }}" class="product-card">
                     <div class="product-image-placeholder" style="{{ $product->image_path ? 'padding:0; background:none;' : '' }}">
                         @if($product->image_path)
                             <img src="{{ Storage::url($product->image_path) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -162,7 +162,7 @@
             <h2 style="color:#f1f5f9; font-size:1.25rem; font-weight:700; margin:0 0 0.5rem;">No se encontraron productos</h2>
             <p style="color:#94a3b8; margin:0;">Intenta seleccionar otra categoría o vuelve más tarde.</p>
             @if(request('category'))
-                <a href="{{ route('shop.index') }}" style="display:inline-block; margin-top:1.5rem; color:var(--primary); text-decoration:none; font-weight:600;">← Ver todo el catálogo</a>
+                <a href="{{ route('shop.index', $tenant->slug) }}" style="display:inline-block; margin-top:1.5rem; color:var(--primary); text-decoration:none; font-weight:600;">← Ver todo el catálogo</a>
             @endif
         </div>
     @endif

@@ -135,13 +135,16 @@
                 @auth
                     <a href="{{ url('/dashboard') }}" class="nav-link" style="border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 10px; background: rgba(255,255,255,0.05);">Ir al Dashboard</a>
                 @else
-                    <a href="{{ route('login') }}" class="nav-link" style="border: 1px solid rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 10px; background: rgba(255,255,255,0.05);">Iniciar Sesión</a>
+                    <a href="{{ route('login') }}" class="nav-link" style="font-weight: 600; color: #94a3b8; transition: color 0.2s;">Iniciar Sesión</a>
+                    <a href="{{ route('register') }}" class="nav-link" style="border: 1px solid rgba(59, 130, 246, 0.5); padding: 8px 16px; border-radius: 10px; background: rgba(59, 130, 246, 0.2); color: white;">Crear Tienda Gratis</a>
                 @endauth
             @else
-                <a href="{{ route('shop.cart') }}" class="cart-btn">
-                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-                    <span class="cart-count" id="cartCount">0</span>
-                </a>
+                @isset($tenant)
+                    <a href="{{ route('shop.cart', $tenant->slug) }}" class="cart-btn">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </a>
+                @endisset
             @endif
         </div>
         </div>
@@ -166,9 +169,11 @@
 
     {{-- Lógica básica compartida para el carrito (Local Storage) --}}
     <script>
+        const CART_KEY = 'stocksync_cart_{{ isset($tenant) ? $tenant->slug : "default" }}';
+
         // Actualizar el contador al cargar la página
         function updateCartCount() {
-            let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
             let totalItems = cart.reduce((total, item) => total + item.quantity, 0);
             let countEl = document.getElementById('cartCount');
             if(countEl) countEl.innerText = totalItems;
@@ -176,7 +181,7 @@
 
         // Función para añadir al carrito
         function addToCart(id, name, price, image = '') {
-            let cart = JSON.parse(localStorage.getItem('stocksync_cart')) || [];
+            let cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
             let existingItem = cart.find(item => item.id === id);
             
             if(existingItem) {
@@ -192,7 +197,7 @@
                 });
             }
             
-            localStorage.setItem('stocksync_cart', JSON.stringify(cart));
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
             updateCartCount();
             
             // Efecto visual simple (opcional)
